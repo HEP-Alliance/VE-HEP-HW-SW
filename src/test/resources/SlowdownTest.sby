@@ -1,0 +1,24 @@
+[tasks]
+prf
+cvr
+bmc
+
+[options]
+prf: mode prove
+prf: depth 20
+# prf: append 5
+cvr: mode cover
+cvr: depth 15
+# cvr: append 5
+bmc: mode bmc
+bmc: depth 20
+
+[engines]
+smtbmc
+
+[script]
+read -formal SlowdownTest.sv
+prep -top SlowdownTest
+
+[files]
+out/SlowdownTest/SlowdownTest.sv

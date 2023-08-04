@@ -1,0 +1,16 @@
+[tasks]
+cvr
+
+[options]
+cvr: mode cover
+cvr: depth 15
+
+[engines]
+smtbmc
+
+[script]
+read -formal SATSolver.sv
+prep -top SATSolver
+
+[files]
+out/SATSolver/SATSolver.sv

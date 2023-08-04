@@ -1,0 +1,172 @@
+--- mbedcrypto/include/mbedtls/config.h	2022-02-03 15:00:34.673765980 +0100
++++ ./config.h	2022-02-03 14:46:28.511038084 +0100
+@@ -132,7 +132,7 @@
+  *
+  * Comment if your system does not support time functions
+  */
+-//#define MBEDTLS_HAVE_TIME
++#define MBEDTLS_HAVE_TIME
+ 
+ /**
+  * \def MBEDTLS_HAVE_TIME_DATE
+@@ -153,7 +153,7 @@
+  * mbedtls_platform_gmtime_r() at compile-time by using the macro
+  * MBEDTLS_PLATFORM_GMTIME_R_ALT.
+  */
+-//#define MBEDTLS_HAVE_TIME_DATE
++#define MBEDTLS_HAVE_TIME_DATE
+ 
+ /**
+  * \def MBEDTLS_PLATFORM_MEMORY
+@@ -177,7 +177,7 @@
+  *
+  * Enable this layer to allow use of alternative memory allocators.
+  */
+-#define MBEDTLS_PLATFORM_MEMORY
++//#define MBEDTLS_PLATFORM_MEMORY
+ 
+ /**
+  * \def MBEDTLS_PLATFORM_NO_STD_FUNCTIONS
+@@ -805,7 +805,7 @@
+  * Disable if you run into name conflicts and want to really remove the
+  * mbedtls_strerror()
+  */
+-//#define MBEDTLS_ERROR_STRERROR_DUMMY
++#define MBEDTLS_ERROR_STRERROR_DUMMY
+ 
+ /**
+  * \def MBEDTLS_GENPRIME
+@@ -814,14 +814,14 @@
+  *
+  * Requires: MBEDTLS_BIGNUM_C
+  */
+-//#define MBEDTLS_GENPRIME
++#define MBEDTLS_GENPRIME
+ 
+ /**
+  * \def MBEDTLS_FS_IO
+  *
+  * Enable functions that use the filesystem.
+  */
+-//#define MBEDTLS_FS_IO
++#define MBEDTLS_FS_IO
+ 
+ /**
+  * \def MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES
+@@ -834,7 +834,7 @@
+  *
+  * Uncomment this macro to prevent loading of default entropy functions.
+  */
+-#define MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES
++//#define MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES
+ 
+ /**
+  * \def MBEDTLS_NO_PLATFORM_ENTROPY
+@@ -845,7 +845,7 @@
+  *
+  * Uncomment this macro to disable the built-in platform entropy functions.
+  */
+-#define MBEDTLS_NO_PLATFORM_ENTROPY
++//#define MBEDTLS_NO_PLATFORM_ENTROPY
+ 
+ /**
+  * \def MBEDTLS_ENTROPY_FORCE_SHA256
+@@ -861,7 +861,7 @@
+  * This option is only useful if both MBEDTLS_SHA256_C and
+  * MBEDTLS_SHA512_C are defined. Otherwise the available hash module is used.
+  */
+-#define MBEDTLS_ENTROPY_FORCE_SHA256
++//#define MBEDTLS_ENTROPY_FORCE_SHA256
+ 
+ /**
+  * \def MBEDTLS_ENTROPY_NV_SEED
+@@ -938,7 +938,7 @@
+  *
+  * Comment this macro to disable support for external private RSA keys.
+  */
+-//#define MBEDTLS_PK_RSA_ALT_SUPPORT
++#define MBEDTLS_PK_RSA_ALT_SUPPORT
+ 
+ /**
+  * \def MBEDTLS_PKCS1_V15
+@@ -960,7 +960,7 @@
+  *
+  * This enables support for RSAES-OAEP and RSASSA-PSS operations.
+  */
+-//#define MBEDTLS_PKCS1_V21
++#define MBEDTLS_PKCS1_V21
+ 
+ /**
+  * \def MBEDTLS_PSA_CRYPTO_SPM
+@@ -998,7 +998,7 @@
+  * Uncomment this macro to disable the use of CRT in RSA.
+  *
+  */
+-#define MBEDTLS_RSA_NO_CRT
++//#define MBEDTLS_RSA_NO_CRT
+ 
+ /**
+  * \def MBEDTLS_SELF_TEST
+@@ -1021,7 +1021,7 @@
+  *
+  * Uncomment to enable the smaller implementation of SHA256.
+  */
+-#define MBEDTLS_SHA256_SMALLER
++//#define MBEDTLS_SHA256_SMALLER
+ 
+ /**
+  * \def MBEDTLS_SHA512_SMALLER
+@@ -1031,7 +1031,7 @@
+  *
+  * Uncomment to enable the smaller implementation of SHA512.
+  */
+-#define MBEDTLS_SHA512_SMALLER
++//#define MBEDTLS_SHA512_SMALLER
+ 
+ /**
+  * \def MBEDTLS_SHA512_NO_SHA384
+@@ -1043,7 +1043,7 @@
+  *
+  * Uncomment to disable SHA-384
+  */
+-#define MBEDTLS_SHA512_NO_SHA384
++//#define MBEDTLS_SHA512_NO_SHA384
+ 
+ /**
+  * \def MBEDTLS_THREADING_ALT
+@@ -1816,7 +1816,7 @@
+  *           either MBEDTLS_PSA_ITS_FILE_C or a native implementation of
+  *           the PSA ITS interface
+  */
+-///#define MBEDTLS_PSA_CRYPTO_STORAGE_C
++#define MBEDTLS_PSA_CRYPTO_STORAGE_C
+ 
+ /**
+  * \def MBEDTLS_PSA_ITS_FILE_C
+@@ -1828,7 +1828,7 @@
+  *
+  * Requires: MBEDTLS_FS_IO
+  */
+-//#define MBEDTLS_PSA_ITS_FILE_C
++#define MBEDTLS_PSA_ITS_FILE_C
+ 
+ /**
+  * \def MBEDTLS_RIPEMD160_C
+@@ -1944,7 +1944,7 @@
+  *
+  * This module is used by the HAVEGE random number generator.
+  */
+-//#define MBEDTLS_TIMING_C
++#define MBEDTLS_TIMING_C
+ 
+ /**
+  * \def MBEDTLS_VERSION_C
+@@ -1965,7 +1965,7 @@
+  * Module:  library/xtea.c
+  * Caller:
+  */
+-//#define MBEDTLS_XTEA_C
++#define MBEDTLS_XTEA_C
+ 
+ /* \} name SECTION: mbed TLS modules */
+ 

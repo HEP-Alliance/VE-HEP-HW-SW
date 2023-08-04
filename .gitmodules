@@ -1,0 +1,3 @@
+[submodule "riscv-nix"]
+	path = riscv-nix
+	url = https://github.com/VE-HEP/riscv-nix.git

@@ -1,0 +1,165 @@
+plugins {
+	// Scala
+	id 'scala'
+	id "com.github.maiflai.scalatest" version "0.31"
+	// IDE usage
+	id 'eclipse'
+	id 'idea'
+  // C/ASM
+  id 'c'
+  id 'assembler'
+}
+
+repositories {
+	mavenCentral()
+	maven { url 'https://jitpack.io' }
+}
+
+
+sourceSets {
+	main {
+		scala.srcDirs = ['pqvexriscv/src/main/scala', 'src/main/scala']
+		java.srcDirs = ['pqvexriscv/src/main/java']
+	} 	
+}
+
+
+dependencies {
+  implementation group: 'net.java.dev.jna', name: 'jna', version: '5.7.0'
+	implementation 'com.github.SpinalHDL:SpinalHDL:7e3c3d1367eaac655f4ad5636fba441852fe073e'
+	implementation 'com.github.SpinalHDL:VexRiscv:5fc4125763'
+  //implementation files('libs/pqvexriscv_2.11-0.1.jar')
+	scalaCompilerPlugins 'com.github.spinalhdl:spinalhdl-idsl-plugin_2.11:1.6.0'
+	testImplementation group: 'org.scalatest', name: 'scalatest_2.11', version: '3.2.0'
+	testRuntimeOnly group: 'com.vladsch.flexmark', name: 'flexmark-all', version: '0.35.0'
+}
+
+
+sourceCompatibility = 8
+
+task runSlowdownTest(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	main = "examples.SlowdownTest"
+}
+
+task runMurax(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.Simulation"
+  args "--jtag --ramSize=16".split() 
+}
+
+task runHSMSim(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.HSMSim"
+    args "--ram 512,512 --mulacc --spi --init out/main.bin".split() 
+}
+
+task runVec(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.HSMSim"
+  args "--ram 512,512 --gpio --wave  --spi".split() 
+}
+
+
+
+task runHSM(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.PQVexRiscvVEHEP"
+  args "--aes-masked --gpio --spi --mulacc".split()
+}
+
+task runHSMECP5(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.PQVexRiscvVEHEP"
+  args "--aes-masked --gpio --spi --mulacc --ecp5".split() 
+}
+
+task runDebugTest(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.DebugTest"
+  args "".split() 
+}
+
+task runHSMWave(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.HSMSim"
+  args "--ram 256,256 --ecp5 --mulacc --wave --gpio --init out/main.bin".split() 
+}
+
+task runSHA256(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "mupq.PQVexRiscvSim"
+  args "--ram 256,128 --init src/main/c/sha256/build/sha256.bin".split() 
+}
+
+task runMulAccSim(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.Simulation"
+  args "--ramSize=160 --mulAcc --mulAccSize=8 --initFile=src/main/c/hello_world/build/hello_world.hex".split() 
+}
+
+task runSimWRust(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.Simulation"
+  args "--ramSize=128 --initFile=out/rust.hex".split()
+  //args "--ramSize=32 --jtag".split()
+}
+
+task runSimWRust2(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = "ap5.HSMSim"
+    args "--ram 256,128 --init out/rust.bin --mulacc".split()
+}
+
+task runMulAcc(type: JavaExec) {
+	classpath = sourceSets.main.runtimeClasspath
+	main = "ap5.MulAcc"
+}
+
+task runTRNG(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "ap5.TRNG"
+}
+
+test {
+  maxParallelForks = 1
+}
+
+model {
+
+  platforms {
+    riscv32 {
+     architecture  "riscv32"
+    }
+  }
+  toolChains {
+    gcc(Gcc) {
+      target("riscv32") {
+        cCompiler.executable = "riscv32-none-elf-gcc"
+        assembler.executable = "riscv32-none-elf-as"
+        linker.executable = "riscv32-none-elf-ld" 
+      }
+    }
+  }
+  components {
+    hello_world(NativeExecutableSpec) {
+      targetPlatform "riscv32"
+      sources {
+        c {
+          source {
+            srcDir "src/main/c/hello_world/src"
+            include "**/*.c"
+          }
+        }
+        platformAsm(AssemblerSourceSet){
+          source {
+            srcDir "src/main/c/hello_world/src"
+            include "src/main/c/hello_world/src/crt.S"
+          }
+        }
+      }
+    }
+  }
+}
+
+

@@ -1,0 +1,15 @@
+DEPRECATED! use 'adapter driver' not 'interface'
+Info : only one transport option; autoselect 'jtag'
+DEPRECATED! use 'adapter speed' not 'adapter_khz'
+DEPRECATED! use 'adapter srst delay' not 'adapter_nsrst_delay'
+Info : set servers polling period to 50ms
+Info : clock speed 800 kHz
+Info : JTAG tap: fpga_spinal.bridge tap/device found: 0x10001fff (mfg: 0x7ff (<invalid>), part: 0x0001, ver: 0x1)
+Info : starting gdb server for fpga_spinal.cpu0 on pipe
+requesting target halt and executing a soft reset
+Info : Listening on port 6666 for tcl connections
+Info : Listening on port 4444 for telnet connections
+Info : accepting 'gdb' connection from pipe
+Info : JTAG tap: fpga_spinal.bridge tap/device found: 0x10001fff (mfg: 0x7ff (<invalid>), part: 0x0001, ver: 0x1)
+Info : JTAG tap: fpga_spinal.bridge tap/device found: 0x10001fff (mfg: 0x7ff (<invalid>), part: 0x0001, ver: 0x1)
+Info : dropped 'gdb' connection

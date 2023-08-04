@@ -1,0 +1,20 @@
+[tasks]
+bmc
+cvr
+
+[options]
+bmc: mode bmc
+bmc: depth 15
+cvr: mode cover
+cvr: depth 15
+
+[engines]
+smtbmc
+
+[script]
+read -formal MulAccVerifier.sv
+prep -top MulAccVerifier
+
+[files]
+out/MulAccVerifier/MulAccVerifier.sv
+out/MulAccVerifier/MulAccVerifier.sv_toplevel_dut_acc.bin
