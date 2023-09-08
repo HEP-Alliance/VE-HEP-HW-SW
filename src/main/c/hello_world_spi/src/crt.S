@@ -92,6 +92,8 @@ ctors_done:
   csrw mie,a0
   li a0, 0x1808     //1808 enable interrupts
   csrw mstatus,a0
+  la t0, trap_entry
+  csrw mtvec, t0
 
   call main
 infinitLoop:
