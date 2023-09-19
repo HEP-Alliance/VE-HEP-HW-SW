@@ -1,21 +1,13 @@
 # VE-HEP
 
-Example hello world with C in simulation:
-```
-make -C src/main/c/hello_world all
-./gradlew runHSMSim
-```
+This is the VE-HEP HSM repository. If you want to run the simulation
+on your pc you can do it like proposed in the following example. Further 
+down you find instruction on how to generate a bitstream for the FPGA
+and how to build and program the TPM2.0 Firmware for the HSM. For operating
+the TPM2.0 Firmware we would refer you to the TPM2.0 [Specification](https://trustedcomputinggroup.org/resource/tpm-library-specification/).
 
-# Formal verification with SpinalHDL
 
-Tool stack:
-
-- SpinalHDL -> Verilog hardware generation + formal statements
-- SymbiYosys as Yosys frontend + runner for formal verification
-- Scala as programming language, Gradle as build system
-- (optional) Nix for a reproducible working environment, direnv for comfort
-
-## Setup
+### Setup
 
 `nix-shell` or for direnv users, `direnv allow`.
 
@@ -25,7 +17,60 @@ the Java and Scala versions are important.
 IDE users can generate a project with `./gradlew eclipse` or `./gradlew idea`,
 respectively.
 
-For more details view this ![README.md](https://git.sit.fraunhofer.de/fischer/riscv-nix/-/blob/main/README.md).
+For more details view this ![README.md](https://github.com/VE-HEP/riscv-nix#readme).
+
+
+### Running Code in the Simulation
+
+Example hello world with C in simulation:
+```
+make -C src/main/c/hello_world all
+./gradlew runHSMSim
+```
+
+
+### FPGA bitstream generation
+
+We used the [ECP5 Evaluation Board](https://www.latticesemi.com/products/developmentboardsandkits/ecp5evaluationboard) for development but other ECP5 FPGA boards might work as well.
+
+The ECP5 fpga bitstream for the design can be generated using the follwing command:
+
+```
+just buildECP5
+```
+
+### Programming the FPGA 
+The following command can be used to programm the FPGA:
+```
+openocd -f rtl/ecp5-evn.cfg -c "transport select jtag; init; svf out/PQVexRiscvECP5.svf; exit"
+```
+this wil generate a .svf and a .bit file that can be placed onto the Lattice ECP5 FPGA using either ecp5prog (to place it in the spi flash memory of the board) or openocd (to directly place the bitstream on the FPGA SRAM).
+
+
+### Wiring the FPGA board
+
+| Function | Location |
+| -------- | -------- |
+|uart_txd  |   B15    |
+|uart_rxd  |   C15    |
+|jtag_tdo  |   B20    |
+|jtag_tdi  |   E11    |
+|jtag_tck  |   C12    |
+|jtag_tms  |   E12    |
+|spi_sclk  |   B13    |
+|spi_mosi  |   D11    |
+|spi_miso_write | B12   |
+|spi_ss    |   D12    |
+
+
+# Formal verification with SpinalHDL
+
+Tool stack:
+
+- SpinalHDL -> Verilog hardware generation + formal statements
+- SymbiYosys as Yosys frontend + runner for formal verification
+- Scala as programming language, Gradle as build system
+- (optional) Nix for a reproducible working environment, direnv for comfort
 
 ## Usage
 
@@ -89,16 +134,6 @@ the simulated HSM using the tcpjtag connection with openocd/gdb.
 ### TODOs here 
 - add example for jtag connection loading the hello world binary with gdb
 
-## FPGA bitstream generation
-
-The ECP5 fpga bitstream for the design can be generated using the follwing command:
-
-```
-just buildECP5
-```
-
-this wil generate a .svf and a .bit file that can be placed onto the Lattice ECP5 FPGA using either ecp5prog (to place it in the spi flash memory of the board) or openocd (to directly place the bitstream on the FPGA SRAM).
-
 ## HSM Firmware
 
 The TPM2.0 (basically the reference implementation by Microsoft) can be build using the following commands:
@@ -109,26 +144,7 @@ make -C src/main/c/hsm all
 ```
 Similar to the hello_world example this will place a main.{bin,elf} in the out/ directory.  
 
-## Programming the FPGA 
-The following command can be used to programm the FPGA:
-```
-openocd -f rtl/ecp5-evn.cfg -c "transport select jtag; init; svf out/PQVexRiscvECP5.svf; exit"
-```
 
-## Wiring the FPGA board
-
-| Function | Location |
-| -------- | -------- |
-|uart_txd  |   B15    |
-|uart_rxd  |   C15    |
-|jtag_tdo  |   B20    |
-|jtag_tdi  |   E11    |
-|jtag_tck  |   C12    |
-|jtag_tms  |   E12    |
-|spi_sclk  |   B13    |
-|spi_mosi  |   D11    |
-|spi_miso_write | B12   |
-|spi_ss    |   D12    |
 
 
 
