@@ -1,23 +1,13 @@
-# AP5
+# VE-HEP
 
-Arbeitspaket 5: RISC-V HSM Design
+This is the VE-HEP HSM repository. If you want to run the simulation
+on your pc you can do it like proposed in the following example. Further 
+down you find instruction on how to generate a bitstream for the FPGA
+and how to build and program the TPM2.0 Firmware for the HSM. For operating
+the TPM2.0 Firmware we would refer you to the TPM2.0 [Specification](https://trustedcomputinggroup.org/resource/tpm-library-specification/).
 
-Example hello world with C in simulation:
-```
-make -C src/main/c/hello_world all
-./gradlew runHSMSim
-```
 
-# Formal verification with SpinalHDL
-
-Tool stack:
-
-- SpinalHDL -> Verilog hardware generation + formal statements
-- SymbiYosys as Yosys frontend + runner for formal verification
-- Scala as programming language, Gradle as build system
-- (optional) Nix for a reproducible working environment, direnv for comfort
-
-## Setup
+### Setup
 
 `nix-shell` or for direnv users, `direnv allow`.
 
@@ -27,21 +17,51 @@ the Java and Scala versions are important.
 IDE users can generate a project with `./gradlew eclipse` or `./gradlew idea`,
 respectively.
 
-For more details view this ![README.md](https://git.sit.fraunhofer.de/fischer/riscv-nix/-/blob/main/README.md).
+For more details view this ![README.md](https://github.com/VE-HEP/riscv-nix#readme).
 
-## Usage
 
-At the moment, there are no individual run tasks, only test.
+### Running Code in the Simulation
 
-Run a specific test:
-
-```bash
-# See https://github.com/maiflai/gradle-scalatest for more CLI options
-./gradlew test --tests MyTest
+Example hello world with C in simulation:
+```
+make -C src/main/c/hello_world all
+./gradlew runHSMSim
 ```
 
-Every test will create a folder in `./out` and put synthesized Verilog files and
-SymbiYosys working directories in there.
+
+### FPGA bitstream generation
+
+We used the [ECP5 Evaluation Board](https://www.latticesemi.com/products/developmentboardsandkits/ecp5evaluationboard) for development but other ECP5 FPGA boards might work as well.
+
+The ECP5 fpga bitstream for the design can be generated using the follwing command:
+
+```
+just buildECP5
+```
+
+### Programming the FPGA 
+The following command can be used to programm the FPGA:
+```
+openocd -f rtl/ecp5-evn.cfg -c "transport select jtag; init; svf out/PQVexRiscvECP5.svf; exit"
+```
+this wil generate a .svf and a .bit file that can be placed onto the Lattice ECP5 FPGA using either ecp5prog (to place it in the spi flash memory of the board) or openocd (to directly place the bitstream on the FPGA SRAM).
+
+
+### Wiring the FPGA board
+
+| Function | Location |
+| -------- | -------- |
+|uart_txd  |   B15    |
+|uart_rxd  |   C15    |
+|jtag_tdo  |   B20    |
+|jtag_tdi  |   E11    |
+|jtag_tck  |   C12    |
+|jtag_tms  |   E12    |
+|spi_sclk  |   B13    |
+|spi_mosi  |   D11    |
+|spi_miso_write | B12   |
+|spi_ss    |   D12    |
+
 
 ## VEHEP Simulation 
 
@@ -91,16 +111,6 @@ the simulated HSM using the tcpjtag connection with openocd/gdb.
 ### TODOs here 
 - add example for jtag connection loading the hello world binary with gdb
 
-## FPGA bitstream generation
-
-The ECP5 fpga bitstream for the design can be generated using the follwing command:
-
-```
-just buildECP5
-```
-
-this wil generate a .svf and a .bit file that can be placed onto the Lattice ECP5 FPGA using either ecp5prog (to place it in the spi flash memory of the board) or openocd (to directly place the bitstream on the FPGA SRAM).
-
 ## HSM Firmware
 
 The TPM2.0 (basically the reference implementation by Microsoft) can be build using the following commands:
@@ -111,28 +121,37 @@ make -C src/main/c/hsm all
 ```
 Similar to the hello_world example this will place a main.{bin,elf} in the out/ directory.  
 
-## Programming the FPGA 
-The following command can be used to programm the FPGA:
+## Project structure
+
+The project follows the standard Gradle project architecture:
+`./src/{main,test}/{c,java,scala,verilog,resources}/` directories for sources,
+`./out` for build artifacts and top-level for configuration.
+
+
+## Formal verification with SpinalHDL
+
+(This is no longer relevant but documents how formal verification was tested with the SpinalHDL setup)
+
+Tool stack:
+
+- SpinalHDL -> Verilog hardware generation + formal statements
+- SymbiYosys as Yosys frontend + runner for formal verification
+- Scala as programming language, Gradle as build system
+- (optional) Nix for a reproducible working environment, direnv for comfort
+
+### Usage
+
+At the moment, there are no individual run tasks, only test.
+
+Run a specific test:
+
+```bash
+# See https://github.com/maiflai/gradle-scalatest for more CLI options
+./gradlew test --tests MyTest
 ```
-openocd -f rtl/ecp5-evn.cfg -c "transport select jtag; init; svf out/PQVexRiscvECP5.svf; exit"
-```
 
-## Wiring the FPGA board
-
-| Function | Location |
-| -------- | -------- |
-|uart_txd  |   B15    |
-|uart_rxd  |   C15    |
-|jtag_tdo  |   B20    |
-|jtag_tdi  |   E11    |
-|jtag_tck  |   C12    |
-|jtag_tms  |   E12    |
-|spi_sclk  |   B13    |
-|spi_mosi  |   D11    |
-|spi_miso_write | B12   |
-|spi_ss    |   D12    |
-
-
+Every test will create a folder in `./out` and put synthesized Verilog files and
+SymbiYosys working directories in there.
 
 
 ## Examples
@@ -146,8 +165,3 @@ openocd -f rtl/ecp5-evn.cfg -c "transport select jtag; init; svf out/PQVexRiscvE
   good actually. Also, there is no limit on the bit depth of the problem, the
   `depth` parameter controls the *time* depth, i.e. the number of cycles.)
 
-## Project structure
-
-The project follows the standard Gradle project architecture:
-`./src/{main,test}/{c,java,scala,verilog,resources}/` directories for sources,
-`./out` for build artifacts and top-level for configuration.
