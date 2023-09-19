@@ -1,6 +1,4 @@
-# AP5
-
-Arbeitspaket 5: RISC-V HSM Design
+# VE-HEP
 
 Example hello world with C in simulation:
 ```
