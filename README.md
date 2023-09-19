@@ -63,29 +63,6 @@ this wil generate a .svf and a .bit file that can be placed onto the Lattice ECP
 |spi_ss    |   D12    |
 
 
-# Formal verification with SpinalHDL
-
-Tool stack:
-
-- SpinalHDL -> Verilog hardware generation + formal statements
-- SymbiYosys as Yosys frontend + runner for formal verification
-- Scala as programming language, Gradle as build system
-- (optional) Nix for a reproducible working environment, direnv for comfort
-
-## Usage
-
-At the moment, there are no individual run tasks, only test.
-
-Run a specific test:
-
-```bash
-# See https://github.com/maiflai/gradle-scalatest for more CLI options
-./gradlew test --tests MyTest
-```
-
-Every test will create a folder in `./out` and put synthesized Verilog files and
-SymbiYosys working directories in there.
-
 ## VEHEP Simulation 
 
 In order to test the design with a firmware one needs to compile the firmware
@@ -144,9 +121,37 @@ make -C src/main/c/hsm all
 ```
 Similar to the hello_world example this will place a main.{bin,elf} in the out/ directory.  
 
+## Project structure
+
+The project follows the standard Gradle project architecture:
+`./src/{main,test}/{c,java,scala,verilog,resources}/` directories for sources,
+`./out` for build artifacts and top-level for configuration.
 
 
+## Formal verification with SpinalHDL
 
+(This is no longer relevant but documents how formal verification was tested with the SpinalHDL setup)
+
+Tool stack:
+
+- SpinalHDL -> Verilog hardware generation + formal statements
+- SymbiYosys as Yosys frontend + runner for formal verification
+- Scala as programming language, Gradle as build system
+- (optional) Nix for a reproducible working environment, direnv for comfort
+
+### Usage
+
+At the moment, there are no individual run tasks, only test.
+
+Run a specific test:
+
+```bash
+# See https://github.com/maiflai/gradle-scalatest for more CLI options
+./gradlew test --tests MyTest
+```
+
+Every test will create a folder in `./out` and put synthesized Verilog files and
+SymbiYosys working directories in there.
 
 
 ## Examples
@@ -160,8 +165,3 @@ Similar to the hello_world example this will place a main.{bin,elf} in the out/ 
   good actually. Also, there is no limit on the bit depth of the problem, the
   `depth` parameter controls the *time* depth, i.e. the number of cycles.)
 
-## Project structure
-
-The project follows the standard Gradle project architecture:
-`./src/{main,test}/{c,java,scala,verilog,resources}/` directories for sources,
-`./out` for build artifacts and top-level for configuration.
