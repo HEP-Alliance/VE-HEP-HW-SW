@@ -51,7 +51,7 @@ task runMurax(type: JavaExec) {
 task runHSMSim(type: JavaExec) {
   classpath = sourceSets.main.runtimeClasspath
   main = "ap5.HSMSim"
-    args "--ram 512,512 --mulacc --spi --init out/main.bin".split() 
+    args "--ram 512,512 --mulacc --spi --aes --init out/main.bin".split() 
 }
 
 task runVec(type: JavaExec) {
