@@ -58,7 +58,7 @@ just buildECP5
 ### Programming the FPGA 
 The following command can be used to programm the FPGA:
 ```
-openocd -f rtl/ecp5-evn.cfg -c "transport select jtag; init; svf out/PQVexRiscvECP5.svf; exit"
+openocd-vexriscv -f rtl/ecp5-evn.cfg -c "transport select jtag; init; svf out/PQVexRiscvECP5.svf; exit"
 ```
 this wil generate a .svf and a .bit file that can be placed onto the Lattice ECP5 FPGA using either ecp5prog (to place it in the spi flash memory of the board) or openocd (to directly place the bitstream on the FPGA SRAM).
 
