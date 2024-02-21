@@ -9,15 +9,29 @@ the TPM2.0 Firmware we would refer you to the TPM2.0 [Specification](https://tru
 
 ### Setup
 
-Clone the repository recursively (`git clone --recursive https://github.com/HEP-Alliance/VE-HEP-HW-SW.git`) and run `nix-shell` in its root. For direnv users, `direnv allow`.
+#### Install nix
 
-Non-Nix users, please note that a custom `symbiosys` version is used. Also maybe
-the Java and Scala versions are important.
+One way to do that is by running the following command:
 
-IDE users can generate a project with `./gradlew eclipse` or `./gradlew idea`,
-respectively.
+```sh
+$ curl -L https://nixos.org/nix/install | sh
+```
+
+The script may ask you to log out and into your system again after installation, or to modify a file like your bashrc. Make sure to follow what the installation asks of you.
+
+#### Run nix-shell
+
+Clone the repository recursively (`git clone --recursive https://github.com/HEP-Alliance/VE-HEP-HW-SW.git`) and run `nix-shell` in its root. For direnv users, `direnv allow`. All of the following commands have to be ran from the nix-shell.
 
 For more details view this ![README.md](https://github.com/VE-HEP/riscv-nix#readme).
+
+#### IDEs
+
+IDE users can generate a project with `./gradlew eclipse` or `./gradlew idea`, respectively.
+
+#### Without nix
+
+Non-Nix users, please note that a custom `symbiosys` version is used. Also maybe the Java and Scala versions are important.
 
 
 ### Running Code in the Simulation
