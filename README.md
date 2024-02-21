@@ -9,7 +9,7 @@ the TPM2.0 Firmware we would refer you to the TPM2.0 [Specification](https://tru
 
 ### Setup
 
-`nix-shell` or for direnv users, `direnv allow`.
+Clone the repository and run `nix-shell` in its root. For direnv users, `direnv allow`.
 
 Non-Nix users, please note that a custom `symbiosys` version is used. Also maybe
 the Java and Scala versions are important.
