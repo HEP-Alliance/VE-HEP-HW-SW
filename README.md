@@ -21,7 +21,9 @@ The script may ask you to log out and into your system again after installation,
 
 #### Run nix-shell
 
-Clone the repository recursively (`git clone --recursive https://github.com/HEP-Alliance/VE-HEP-HW-SW.git`) and run `nix-shell` in its root. For direnv users, `direnv allow`. All of the following commands have to be ran from the nix-shell.
+Clone the repository recursively (`git clone --recursive https://github.com/HEP-Alliance/VE-HEP-HW-SW.git`) and run `nix-shell` in its root. For direnv users, `direnv allow`.
+
+**:warning: All of the commands in the remainder of this manual have to be ran from the nix-shell. :warning:**
 
 For more details view this ![README.md](https://github.com/VE-HEP/riscv-nix#readme).
 
