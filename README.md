@@ -137,6 +137,62 @@ make -C src/main/c/hsm all
 ```
 Similar to the hello_world example this will place a main.{bin,elf} in the out/ directory.  
 
+## Programming the ASIC
+
+### OpenOCD connection
+
+Connect and power the hardware and proceed to connect to the board via openocd:
+
+```sh
+openocd-vexriscv -f rtl/hsmecp5.cfg
+```
+
+You might need root permissions to run this command or create udev rules to access the device without root.
+
+### UART connection
+
+Configure the baud rate of the UART device:
+
+```sh
+stty -F /dev/<UART device> 115200
+```
+
+Again, this might need either root permissions or udev rules.
+
+Now, follow the UART output using:
+
+```sh
+cat /dev/<UART device>
+```
+
+(again, root or udev).
+
+### Connect gdb and flash firmware
+
+While openocd is connected, run gdb and pass the firmware you want to flash, `out/main.elf` in this example:
+
+```sh
+$ gdb out/main.elf
+```
+
+Within the gdb shell, connect to openocd:
+
+```sh
+(gdb) target extended-remote :3333
+```
+
+Use `load` to prepare the firmware for execution, and then `run` to run the firmware.
+
+## Building other (test) firmwares
+
+You can build other firmwares by running:
+
+```sh
+$ make -C src/main/c/<test-name>/ all
+```
+
+The built firmware elf can be found in `out/` afterwards.
+
 ## Project structure
 
 The project follows the standard Gradle project architecture:
