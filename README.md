@@ -43,45 +43,12 @@ A more advanced yet cleaner way to solve the permission issues is to configure u
 
 IDE users can generate a project with `./gradlew eclipse` or `./gradlew idea`, respectively.
 
-#### Without nix
+#### Without Nix
 
 Non-Nix users, please note that a custom `symbiosys` version is used. Also maybe the Java and Scala versions are important.
 
-### FPGA bitstream generation
 
-We used the [ECP5 Evaluation Board](https://www.latticesemi.com/products/developmentboardsandkits/ecp5evaluationboard) for development but other ECP5 FPGA boards might work as well.
-
-The ECP5 fpga bitstream for the design can be generated using the follwing command:
-
-```
-just buildECP5
-```
-
-### Programming the FPGA 
-The following command can be used to programm the FPGA:
-```
-openocd-vexriscv -f rtl/ecp5-evn.cfg -c "transport select jtag; init; svf out/PQVexRiscvECP5.svf; exit"
-```
-this wil generate a .svf and a .bit file that can be placed onto the Lattice ECP5 FPGA using either ecp5prog (to place it in the spi flash memory of the board) or openocd (to directly place the bitstream on the FPGA SRAM).
-
-
-### Wiring the FPGA board
-
-| Function | Location |
-| -------- | -------- |
-|uart_txd  |   B15    |
-|uart_rxd  |   C15    |
-|jtag_tdo  |   B20    |
-|jtag_tdi  |   E11    |
-|jtag_tck  |   C12    |
-|jtag_tms  |   E12    |
-|spi_sclk  |   B13    |
-|spi_mosi  |   D11    |
-|spi_miso_write | B12   |
-|spi_ss    |   D12    |
-
-
-## VEHEP Simulation 
+## Simulation 
 
 In order to test the design with a firmware one needs to compile the firmware
 using the GNU make build system:
@@ -126,6 +93,39 @@ WAITING FOR TCP Spi CONNECTION
 it is also possible to load compiled .elf binaries and debug them  on 
 the simulated HSM using the tcpjtag connection with openocd/gdb. 
 
+### FPGA bitstream generation
+
+We used the [ECP5 Evaluation Board](https://www.latticesemi.com/products/developmentboardsandkits/ecp5evaluationboard) for development but other ECP5 FPGA boards might work as well.
+
+The ECP5 fpga bitstream for the design can be generated using the follwing command:
+
+```
+just buildECP5
+```
+
+### Programming the FPGA 
+The following command can be used to programm the FPGA:
+```
+openocd-vexriscv -f rtl/ecp5-evn.cfg -c "transport select jtag; init; svf out/PQVexRiscvECP5.svf; exit"
+```
+this wil generate a .svf and a .bit file that can be placed onto the Lattice ECP5 FPGA using either ecp5prog (to place it in the spi flash memory of the board) or openocd (to directly place the bitstream on the FPGA SRAM).
+
+
+### Wiring the FPGA board
+
+| Function | Location |
+| -------- | -------- |
+|uart_txd  |   B15    |
+|uart_rxd  |   C15    |
+|jtag_tdo  |   B20    |
+|jtag_tdi  |   E11    |
+|jtag_tck  |   C12    |
+|jtag_tms  |   E12    |
+|spi_sclk  |   B13    |
+|spi_mosi  |   D11    |
+|spi_miso_write | B12   |
+|spi_ss    |   D12    |
+
 ## HSM Firmware
 
 The TPM2.0 (basically the reference implementation by Microsoft) can be build using the following commands:
@@ -148,7 +148,7 @@ Connect and power the hardware and proceed to connect to the board via openocd:
 openocd-vexriscv -f rtl/hsmecp5.cfg
 ```
 
-Refer to [USB device access](#USB_device_access) if this command fails with `LIBUSB_ERROR_ACCESS`.
+Refer to [USB device access](#usb-device-access) if this command fails with `LIBUSB_ERROR_ACCESS`.
 
 ### UART connection
 
@@ -158,7 +158,7 @@ Configure the baud rate of the UART device:
 stty -F /dev/<UART device> 115200
 ```
 
-Refer to [USB device access](#USB_device_access) if this command fails due to denied permissions.
+Refer to [USB device access](#usb-device-access) if this command fails due to denied permissions.
 
 Now, follow the UART output using:
 
