@@ -9,7 +9,7 @@ the TPM2.0 Firmware we would refer you to the TPM2.0 [Specification](https://tru
 
 ### Setup
 
-#### Install nix
+#### Install Nix
 
 One way to do that is by running the following command:
 
@@ -17,7 +17,7 @@ One way to do that is by running the following command:
 $ curl -L https://nixos.org/nix/install | sh
 ```
 
-The script may ask you to log out and into your system again after installation, or to modify a file like your bashrc. Make sure to follow what the installation asks of you.
+The script may ask you to log out and into your system again after installation. Make sure to do that.
 
 #### Run nix-shell
 
@@ -27,6 +27,18 @@ Clone the repository recursively (`git clone --recursive https://github.com/HEP-
 
 For more details view this ![README.md](https://github.com/VE-HEP/riscv-nix#readme).
 
+#### USB device access
+
+Commands that communicate with external hardware may not work out of the box due to permission issues.
+
+A quick way to avoid those is to run the respecitve commands with root privileges using `sudo [command]`. If attempting to run a command that way fails with `command not found`, use the following to preserve `$PATH`:
+
+```sh
+$ sudo --preserve-env=PATH env [command]
+```
+
+A more advanced yet cleaner way to solve the permission issues is to configure udev rules for the devices; this will not be explained here.
+
 #### IDEs
 
 IDE users can generate a project with `./gradlew eclipse` or `./gradlew idea`, respectively.
@@ -34,16 +46,6 @@ IDE users can generate a project with `./gradlew eclipse` or `./gradlew idea`, r
 #### Without nix
 
 Non-Nix users, please note that a custom `symbiosys` version is used. Also maybe the Java and Scala versions are important.
-
-
-### Running Code in the Simulation
-
-Example hello world with C in simulation:
-```
-make -C src/main/c/hello_world all
-./gradlew runHSMSim
-```
-
 
 ### FPGA bitstream generation
 
@@ -124,9 +126,6 @@ WAITING FOR TCP Spi CONNECTION
 it is also possible to load compiled .elf binaries and debug them  on 
 the simulated HSM using the tcpjtag connection with openocd/gdb. 
 
-### TODOs here 
-- add example for jtag connection loading the hello world binary with gdb
-
 ## HSM Firmware
 
 The TPM2.0 (basically the reference implementation by Microsoft) can be build using the following commands:
@@ -141,13 +140,15 @@ Similar to the hello_world example this will place a main.{bin,elf} in the out/ 
 
 ### OpenOCD connection
 
+Start by editing `rtl/hsmecp5.cfg` to make sure that the correct configuration for your JTAG debugger is used.
+
 Connect and power the hardware and proceed to connect to the board via openocd:
 
 ```sh
 openocd-vexriscv -f rtl/hsmecp5.cfg
 ```
 
-You might need root permissions to run this command or create udev rules to access the device without root.
+Refer to [USB device access](#USB_device_access) if this command fails with `LIBUSB_ERROR_ACCESS`.
 
 ### UART connection
 
@@ -157,15 +158,13 @@ Configure the baud rate of the UART device:
 stty -F /dev/<UART device> 115200
 ```
 
-Again, this might need either root permissions or udev rules.
+Refer to [USB device access](#USB_device_access) if this command fails due to denied permissions.
 
 Now, follow the UART output using:
 
 ```sh
 cat /dev/<UART device>
 ```
-
-(again, root or udev).
 
 ### Connect gdb and flash firmware
 
