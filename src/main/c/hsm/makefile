@@ -63,7 +63,7 @@ OBJS := $(addprefix $(OBJDIR)/,$(OBJS))
 
 
 fetch:
-	git clone --recursive https://github.com/ambiso/ms-tpm-20-ref.git mstpm || true
+	git clone --recursive https://github.com/ben01100001/ms-tpm-20-ref.git mstpm || true
 
 all: $(OBJDIR)/$(PROJ_NAME).elf $(OBJDIR)/$(PROJ_NAME).bin 
 	mkdir -p ../../../../out
